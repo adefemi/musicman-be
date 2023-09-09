@@ -1,0 +1,28 @@
+service: remotemore
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+  profile: control
+  stage: dev
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+
+package:
+  individually: true
+  exclude:
+    - '**'
+  include:
+    - dist/**
+
+plugins:
+  - serverless-offline
+
+functions:
+  app:
+    handler: dist/index.handler
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
